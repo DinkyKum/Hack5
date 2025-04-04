@@ -5,6 +5,7 @@ const FreeTruck = require("../models/freeTruck");
 const TraderRequest = require("../models/traderRequest");
 const TraderMerged = require("../models/TraderMerged");
 const { companyAuth } = require("../middlewares/auth");
+const MergeableTrader = require("../models/mergeableTrader")
 
 // Route to handle trader truck merging
 traderRouter.get("/mergedTrader", companyAuth, async (req, res) => {
@@ -26,17 +27,17 @@ traderRouter.get("/mergedTrader", companyAuth, async (req, res) => {
             if (assignedTruck) {
                 const mergedEntry = {
                     truckId: assignedTruck.truckId,
-                    loads: request.load,
+                    load: request.load,
                     source: request.source,
                     destination: request.destination,
-                    stops: assignedTruck.stops,
+                    stops: request.stops,
                 };
                 traderMergedData.push(mergedEntry);
             }
         }
 
         if (traderMergedData.length > 0) {
-            await TraderMerged.insertMany(traderMergedData);
+            await MergeableTrader.insertMany(traderMergedData);
         }
 
         res.json({ message: "Traders merged successfully", traderMergedData });

@@ -117,17 +117,25 @@ mergeRouter.get('/mergeableSchedule', companyAuth, async (req, res) => {
         const unmergedTrucks = allTrucks.filter(truck => !mergedTruckIds.has(truck._id.toString()));
 
         if (unmergedTrucks.length > 0) {
-            const unmergedTrucksData = unmergedTrucks.map(truck => ({
-                truckId: truck._id,
-                licensePlate: truck.licensePlate,
-                totalCapacity: truck.totalCapacity,
-                currentLoad: truck.currentLoad,
-                stops: truckRoutesMap.get(truck._id.toString()) || []
-            }));
-
-            await UnmergedTruck.deleteMany({}); // Clear previous records
+            const unmergedTrucksData = await Promise.all(
+                unmergedTrucks.map(async (truck) => {
+                    const route = await Route.findOne({ truckId: truck._id });
+                    return {
+                        truckId: truck._id,
+                        licensePlate: truck.licensePlate,
+                        totalCapacity: truck.totalCapacity,
+                        currentLoad: truck.currentLoad,
+                        source: route ? route.source : null,  // Add source
+                        destination: route ? route.destination : null, // Add destination
+                        stops: route ? route.stops : []  // Include stops
+                    };
+                })
+            );
+        
+            await UnmergedTruck.deleteMany({});
             await UnmergedTruck.insertMany(unmergedTrucksData);
         }
+        
 
         res.json({ mergeablePairs });
 
