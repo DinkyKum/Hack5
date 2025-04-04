@@ -3,6 +3,7 @@ const scheduleDeliveryRouter = express.Router();
 const { companyAuth } = require('../middlewares/auth');
 const Truck = require('../models/truck'); 
 const Route = require('../models/route'); 
+const TraderRequest = require('../models/traderRequest');
 const {validateTruckData}=require('../utils/validation')
 
 scheduleDeliveryRouter.post('/scheduleDelivery/addtruck', companyAuth, async (req, res) => {
@@ -93,5 +94,33 @@ scheduleDeliveryRouter.delete('/scheduleDelivery/deletescheduleDelivery/:id', co
         res.status(400).send("Error deleting route: " + err.message);
     }
 });
+
+
+scheduleDeliveryRouter.post('/scheduleDelivery/traderRequest', companyAuth, async (req, res) => {
+    try {
+        const { traderId, load, source, destination, stops } = req.body;
+
+        if (!traderId || !source || !destination) {
+            return res.status(400).send("Trader ID, source, and destination are required.");
+        }
+
+        const newTraderRequest = new TraderRequest({
+            traderId,
+            load,
+            source,
+            destination,
+            stops,
+        });
+
+        await newTraderRequest.save();
+
+        res.status(201).send("Trader request added successfully: " + newTraderRequest);
+    } catch (err) {
+        console.error(err.stack);
+        res.status(400).send("Error adding trader request: " + err.message);
+    }
+});
+
+
 
 module.exports = scheduleDeliveryRouter;
