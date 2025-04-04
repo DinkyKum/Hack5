@@ -6,6 +6,7 @@ const {companyAuth} =  require('../middlewares/auth');
 const MergeablePair =  require('../models/mergeablePair');
 const MergedSchedule= require('../models/mergedSchedule');
 const UnmergedTruck = require('../models/unmergedTruck');
+const FreeTruck = require('../models/freeTruck')
 
 mergeRouter.get('/mergeableSchedule', companyAuth, async (req, res) => {
     try {
@@ -140,7 +141,6 @@ mergeRouter.get('/mergeableSchedule', companyAuth, async (req, res) => {
 
 mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
     try {
-        // Fetch all mergeable pairs from the database
         const mergeablePairs = await MergeablePair.find().populate('truckOneId').populate('truckTwoId');
 
         if (mergeablePairs.length === 0) {
@@ -150,7 +150,6 @@ mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
         let mergedSchedules = [];
 
         for (let pair of mergeablePairs) {
-            // Fetch truck details
             const truckOne = await Truck.findById(pair.truckOneId);
             const truckTwo = await Truck.findById(pair.truckTwoId);
 
@@ -158,19 +157,16 @@ mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
                 continue;
             }
 
-            let finalTruck;
+            let finalTruck = truckOne.totalCapacity >= truckTwo.totalCapacity ? truckOne : truckTwo;
+            let freeTruck = truckOne.totalCapacity < truckTwo.totalCapacity ? truckOne : truckTwo;
+
+            let totalCapacity = finalTruck.totalCapacity;
             let finalCurrentLoad = [];
             let finalRemainingLoad = [];
             let allStops = [...new Set([...pair.truckOneStops, ...pair.truckTwoStops])];
 
-            // Sorting stops based on occurrence in truckOne's schedule
             allStops.sort((a, b) => pair.truckOneStops.indexOf(a) - pair.truckOneStops.indexOf(b));
 
-            // Choose the truck with the higher capacity
-            finalTruck = truckOne.totalCapacity >= truckTwo.totalCapacity ? truckOne : truckTwo;
-            let totalCapacity = finalTruck.totalCapacity; // Store the total capacity of the chosen truck
-
-            // Calculate the final current load and remaining load at each stop
             for (let stop of allStops) {
                 let indexOne = pair.truckOneStops.indexOf(stop);
                 let indexTwo = pair.truckTwoStops.indexOf(stop);
@@ -185,7 +181,6 @@ mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
                 finalRemainingLoad.push(remainingLoadAtStop);
             }
 
-            // Final source and destination
             let finalSource = allStops[0];
             let finalDestination = allStops[allStops.length - 1];
 
@@ -198,27 +193,35 @@ mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
                 finalCurrentLoad,
                 finalRemainingLoad
             });
+
+            // Check if the free truck is already in FreeTruck collection
+            const existingFreeTruck = await FreeTruck.findOne({ truckId: freeTruck._id });
+            if (!existingFreeTruck) {
+                await FreeTruck.create({
+                    licensePlate: freeTruck.licensePlate,
+                    companyId: freeTruck.companyId,
+                    totalCapacity: freeTruck.totalCapacity,
+                    truckId: freeTruck._id.toString()
+                });
+            }
         }
-        
 
         if (mergedSchedules.length === 0) {
             return res.json({ message: "No valid merged schedules found" });
         }
 
-        // Store merged schedules in the database ensuring uniqueness
         for (let schedule of mergedSchedules) {
             const existingSchedule = await MergedSchedule.findOne({
-            transportationTruckId: schedule.transportationTruckId,
-            stops: schedule.stops,
-            finalCurrentLoad: schedule.finalCurrentLoad,
-            finalRemainingLoad: schedule.finalRemainingLoad
-        });
+                transportationTruckId: schedule.transportationTruckId,
+                stops: schedule.stops,
+                finalCurrentLoad: schedule.finalCurrentLoad,
+                finalRemainingLoad: schedule.finalRemainingLoad
+            });
 
-        if (!existingSchedule) {
-            await MergedSchedule.create(schedule);
+            if (!existingSchedule) {
+                await MergedSchedule.create(schedule);
+            }
         }
-       }
-
 
         res.json({ mergedSchedules });
 
@@ -227,7 +230,6 @@ mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 
 
