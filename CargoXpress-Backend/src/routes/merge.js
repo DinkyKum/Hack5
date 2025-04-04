@@ -219,7 +219,6 @@ mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
         }
        }
 
-
         res.json({ mergedSchedules });
 
     } catch (error) {
@@ -227,6 +226,8 @@ mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
 
 
 
