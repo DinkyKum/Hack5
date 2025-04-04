@@ -1,6 +1,6 @@
 # CargoXpress
 
-CargoXpress is a smart **Truck Load Merging System** that optimizes truck capacity, reduces costs, and enhances route planning by analyzing schedules and merging compatible shipments. It minimizes empty space, cuts fuel wastage, and streamlines logistics for companies, traders, and transporters. With **route-based optimization** and an **efficient scheduling algorithm**, CargoXpress ensures **cost-effective, timely, and sustainable deliveries** by automatically identifying trucks with overlapping routes and assigning loads intelligently. 🚛📍💡
+CargoXpress is a smart **Truck Load Merging System** that optimizes truck capacity, reduces costs, and enhances route planning by analyzing schedules and merging compatible shipments. It minimizes empty space, cuts fuel wastage, and streamlines logistics for companies, traders, and transporters. With **route-based optimization** and an **efficient scheduling algorithm**, CargoXpress ensures **cost-effective, timely, and sustainable deliveries** by automatically identifying trucks with overlapping routes and assigning loads intelligently. 
 
 ## How to Run the Project
 
