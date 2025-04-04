@@ -23,11 +23,16 @@ const EditProfile = ({ user }) => {
 
   const saveProfile = async () => {
     try {
-      const payload = isTrader
+      let payload = isTrader
         ? { name, photoUrl, aadharNumber, emailId }
         : { name, photoUrl, address, registrationNumber, emailId };
-      const res = await axios.put(BASE_URL + "/profile/edit", payload, { withCredentials: true });
-
+  
+        let res;
+        if (isTrader) {
+          res = await axios.put(BASE_URL + "/profile/traderEdit", payload, { withCredentials: true });
+        } else {
+          res = await axios.put(BASE_URL + "/profile/companyEdit", payload, { withCredentials: true });
+        }
       dispatch(addUser(res?.data?.data));
       setShowToast(true);
       setTimeout(() => {
