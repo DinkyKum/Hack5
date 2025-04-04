@@ -11,30 +11,41 @@ const MergeableTrader = require("../models/mergeableTrader")
 traderRouter.get("/mergedTrader", adminAuth, async (req, res) => {
     try {
         const traderRequests = await TraderRequest.find();
-        const unmergedTrucks = await UnmergedTruck.find();
-        const freeTrucks = await FreeTruck.find();
+        let unmergedTrucks = await UnmergedTruck.find();
+        let freeTrucks = await FreeTruck.find();
         let traderMergedData = [];
 
         for (let request of traderRequests) {
-            let assignedTruck = unmergedTrucks.find(truck => 
+            // Find an available truck that matches the source and destination
+            let assignedTruckIndex = unmergedTrucks.findIndex(truck => 
                 truck.stops.includes(request.source) && truck.stops.includes(request.destination)
             );
 
-            if (!assignedTruck) {
-                assignedTruck = freeTrucks.shift(); // Assign free truck if no unmerged truck available
+            let assignedTruck = null;
+
+            if (assignedTruckIndex !== -1) {
+                // Remove the truck from the array to ensure it's not assigned again
+                assignedTruck = unmergedTrucks.splice(assignedTruckIndex, 1)[0];
+            } else if (freeTrucks.length > 0) {
+                // Assign a free truck if no unmerged truck is available
+                assignedTruck = freeTrucks.shift();
             }
 
             if (assignedTruck) {
-                console.log(assignedTruck)
+                console.log("Assigned truck:", assignedTruck);
+
                 const mergedEntry = {
                     truckId: assignedTruck.truckId,
                     load: request.load,
                     source: request.source,
                     destination: request.destination,
-                    stops: request.stops,
+                    stops: request.stops, // Ensure request.stops is correctly structured
                     licensePlate: assignedTruck.licensePlate
                 };
+
                 traderMergedData.push(mergedEntry);
+            } else {
+                console.log(`No available truck found for request: ${request._id}`);
             }
         }
 
@@ -48,5 +59,6 @@ traderRouter.get("/mergedTrader", adminAuth, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
 
 module.exports = traderRouter;

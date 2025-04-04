@@ -9,7 +9,7 @@ const EditProfile = ({ user }) => {
   const [name, setName] = useState(user.name || "");
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl || "");
   const [emailId, setEmailId] = useState(user.emailId || "");
-
+  
   // Check if the user is a trader
   const isTrader = user.aadharNumber !== undefined;
 
@@ -23,14 +23,11 @@ const EditProfile = ({ user }) => {
 
   const saveProfile = async () => {
     try {
-      console.log("Saving profile...");
       const payload = isTrader
         ? { name, photoUrl, aadharNumber, emailId }
         : { name, photoUrl, address, registrationNumber, emailId };
-
       const res = await axios.put(BASE_URL + "/profile/edit", payload, { withCredentials: true });
 
-      console.log(res);
       dispatch(addUser(res?.data?.data));
       setShowToast(true);
       setTimeout(() => {
