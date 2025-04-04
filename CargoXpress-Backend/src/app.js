@@ -3,7 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/database");
-require("dotenv").config();
+const mergedTraderRouter = require('./routes/mergedTrader');
+require("dotenv").config(); 
 
 const profileRouter = require("./routes/profile");
 const authRouter = require("./routes/auth");
@@ -52,6 +53,8 @@ app.use("/", authRouter);
 app.use("/", scheduleDeliveryRouter);
 app.use("/", viewCompanyRouter);
 app.use("/", mergeRouter);
+app.use('/', mergedTraderRouter);
+
 
 // Vercel Serverless Handler
 if (isVercel) {

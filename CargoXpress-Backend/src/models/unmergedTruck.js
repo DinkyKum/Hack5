@@ -19,8 +19,12 @@ const unmergedTruckSchema = new Schema({
     remainingLoad:{
         type:[Number],
         default: [] 
-    }
-
+    },
+    truckId:{
+        type:String,
+        required:true
+    },
+    
 
 });
 
