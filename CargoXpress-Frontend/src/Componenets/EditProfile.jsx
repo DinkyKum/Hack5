@@ -17,10 +17,10 @@ const EditProfile = ({user}) => {
     const [showToast, setShowToast] = useState(false);
   
     const saveProfile = async () => {
-
+      
       try {
         console.log("saving profile ")
-        const res = await axios.put(BASE_URL+"/profile/edit",{name,registrationNumber,address,emailId,photoUrl},{withCredentials:true})
+        const res = await axios.put(BASE_URL+"/profile/edit",{name,address,photoUrl},{withCredentials:true})
         console.log(res)
         dispatch(addUser(res?.data?.data));
         setShowToast(true);
