@@ -47,8 +47,6 @@ profileRouter.delete('/profile/delete', companyAuth, async(req, res)=>{
         res.cookie("token", null, {expires: new Date(Date.now())});
 
         res.send(deletedCompany + "deleted Succesfully and User logged Out");
-
-
     }
     catch(err){
         res.status(400).send("There is some error"+ err);

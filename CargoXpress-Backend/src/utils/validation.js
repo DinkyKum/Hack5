@@ -1,7 +1,7 @@
 const validator=require('validator');
 
 const validateSignupData=(req)=>{
-    const {name, emailId, password, registrationNumber}=req.body;
+    const {name, emailId, password}=req.body;
 
     if(!name){
         throw new Error("Invalid Name");

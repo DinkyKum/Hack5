@@ -4,8 +4,7 @@ const validator = require("validator");
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-
-const traderSchema = new Schema({
+const adminSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -58,14 +57,14 @@ const traderSchema = new Schema({
     },
 });
 
-traderSchema.methods.getJWT= async function(){
+adminSchema.methods.getJWT= async function(){
     const token= await jwt.sign({_id:this._id}, process.env.JWT_SECRET, {expiresIn:'7d'});
     return token;
 }
 
-traderSchema.methods.validatePassword= async function(passwordInputByTrader){
-    const isPasswordValid= await bcrypt.compare(passwordInputByTrader, this.password);
+adminSchema.methods.validatePassword= async function(passwordInputByAdmin){
+    const isPasswordValid= await bcrypt.compare(passwordInputByAdmin, this.password);
     return(isPasswordValid);
 }
 
-module.exports = mongoose.model("Trader", traderSchema);
+module.exports = mongoose.model("Admin", adminSchema);

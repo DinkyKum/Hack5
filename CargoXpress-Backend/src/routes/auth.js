@@ -3,29 +3,41 @@ const authRouter= express.Router();
 const {validateSignupData}=require('../utils/validation')
 const bcrypt = require('bcrypt');
 const TransportCompany= require('../models/transportCompany');
+const Trader= require('../models/trader');
 
-
-authRouter.post('/signup', async (req, res)=>{
+authRouter.post('/signup/:userType', async (req, res)=>{
     try{
-      validateSignupData(req);
-      const {name, emailId, password, registrationNumber}= req.body;
-  
-      const Hashpassword= await bcrypt.hash(password, 10)
-  
-      const company= new TransportCompany({
-          name, emailId, password:Hashpassword, registrationNumber
-      });
-      
-      await company.save();
-      const token= await company.getJWT();
- 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,  
-        sameSite: "none",  
-      });
-      
-      res.json({message: "Company Added Successfully", data: company})
+    const {userType}=req.params;
+      if(userType!="company" && userType!= "trader") throw new Error("Invalid User Type");
+
+      let user=null;
+        const {password}= req.body;
+        const Hashpassword= await bcrypt.hash(password, 10)
+    
+        if(userType=="company"){
+            const {name, emailId, registrationNumber}= req.body;
+            validateSignupData(req);
+            const company= new TransportCompany({
+                name, emailId, password:Hashpassword, registrationNumber
+            });
+            user=company;
+            await company.save();
+        }
+        
+      else if(userType=="trader") {
+        const {name, emailId, aadharNumber}= req.body;
+        validateSignupData(req);
+    
+        const trader= new Trader({
+            name, emailId, password:Hashpassword, aadharNumber
+        });
+        user=trader;
+        await trader.save();
+      }
+
+      const token= await user.getJWT();
+      res.cookie("token", token);
+      res.json({message: `${userType} Added Successfully`, data:user})
      } 
   
      catch(err){
@@ -36,15 +48,25 @@ authRouter.post('/signup', async (req, res)=>{
   authRouter.post('/login', async(req, res)=>{
     try{
         const {emailId, password}= req.body;
-        const company= await TransportCompany.findOne({emailId: emailId});
 
-        if(!company){
-            throw new Error("Invalid Credentials")
-        }
-        const isPasswordValid= await company.validatePassword(password);
+        let user= await TransportCompany.findOne({emailId: emailId});
+          
+        if(user==null){
+            user= await Trader.findOne({emailId: emailId});
+          }
 
-        if(isPasswordValid){
-            const token= await company.getJWT();
+          if(user==null){
+            user= await Admin.findOne({emailId: emailId});
+          }
+
+          if(!user){
+              throw new Error("Invalid Credentials")
+          }
+
+          const isPasswordValid= await user.validatePassword(password);
+
+          if(isPasswordValid){
+            const token= await user.getJWT();
 
             res.cookie("token", token, {
                 httpOnly: true,
@@ -52,9 +74,8 @@ authRouter.post('/signup', async (req, res)=>{
                 sameSite: "none",  
               });
               
-            res.send(company);
+            res.send(user);
         }
-
         else{
             throw new Error("Invalid Credentials")
         }
@@ -68,30 +89,6 @@ authRouter.post('/logout', async(req, res)=>{
     res.cookie("token", null, {expires: new Date(Date.now())});
     res.send("LoggedOut Successfully");
 })
-
-
-authRouter.post('/trader/signup', async (req, res) => {
-    try {
-        const { name, email, password, aadharNumber } = req.body;
-
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create new Trader
-        const trader = new Trader({
-            name,
-            email,
-            password: hashedPassword,
-            aadharNumber
-        });
-
-        await trader.save();
-        res.status(201).json({ message: "Trader Registered Successfully", data: trader });
-    } catch (err) {
-        res.status(400).json({ error: "Error occurred: " + err.message });
-    }
-});
-
 
 
 module.exports= authRouter;
