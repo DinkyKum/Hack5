@@ -13,6 +13,8 @@ import Profile from "./Componenets/Profile";
 import AddTraderRequest from "./Componenets/AddTraderRequest";
 import TraderList from "./Componenets/TraderList";
 import TraderCard from "./Componenets/TraderCard"
+import MergeableTraders from "./Componenets/MergableTraders";
+
 
 
 function App() {
@@ -32,6 +34,7 @@ function App() {
       <Route path="/traderRequest" element={<AddTraderRequest/>}/>
       <Route path="/traderList" element={<TraderList/>}/>
       <Route path="/traderCard" element={<TraderCard/>}/>
+      <Route path="/mergeableTraders" element={<MergeableTraders/>}/>
       
       </Route>
     </Routes>
