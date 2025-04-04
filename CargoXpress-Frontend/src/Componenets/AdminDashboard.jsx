@@ -3,6 +3,7 @@ import CompanyCard from "./CompanyCard";
 import axios from "axios";
 import AdminSection from "./AdminSection";
 import { BASE_URL } from "../utils/constants";
+import TraderList from "./TraderList";
 
 const AdminDashboard = () => {
   const [companies, setCompanies] = useState([]);
@@ -44,7 +45,12 @@ const AdminDashboard = () => {
         ) : (
           <p className="text-center col-span-3">No companies found.</p>
         )}
-      </div>
+      </div>  
+
+    </main>
+    <main  >
+    <h1 className="text-3xl font-bold mb-8 text-center">Featured Traders</h1> 
+    <div className="flex justify-evenly "><TraderList/></div>
     </main>
     </div>
     </div>

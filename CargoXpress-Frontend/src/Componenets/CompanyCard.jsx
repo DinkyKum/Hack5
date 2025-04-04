@@ -8,7 +8,7 @@ const CompanyCard = ({ imageUrl, name, registrationNo, address, email }) => {
         <img
           src={imageUrl || "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"}
           alt={`${name} office`}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-100 transition-transform duration-300"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
