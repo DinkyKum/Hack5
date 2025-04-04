@@ -65,22 +65,11 @@ const AddTraderRequest = () => {
   return (
     <div className="flex justify-center items-center min-h-screen p-10">
       <div className="p-8 rounded-lg shadow-lg w-[500px] bg-gray-800">
-        <h1 className="text-center text-white text-2xl font-bold mb-6">Add Trader Request</h1>
+        <h1 className="text-center text-white text-2xl font-bold mb-6">Add Delivery Details</h1>
 
-        <label className="form-control w-full">
-          <div className="label">
-            <span className="label-text text-white">Trader ID</span>
-          </div>
-          <input
-            type="text"
-            placeholder="Enter Trader ID"
-            value={traderId}
-            onChange={(e) => setTraderId(e.target.value)}
-            className="input input-bordered w-full"
-          />
-        </label>
 
-        <span className="label-text text-white mt-6 block">Enter Load (Numbers)</span>
+
+        <span className="label-text text-white mt-6 block">Load at Each Stop</span>
         {load.map((l, index) => (
           <div key={index} className="flex items-center gap-2 mt-2">
             <input

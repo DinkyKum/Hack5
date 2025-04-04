@@ -114,7 +114,7 @@ const About = () => {
 
 
 <div className="flex flex-col items-center mt-6">
-<Link to="/truck">
+<Link to="/traderRequest">
   <button className="btn btn-outline btn-success text-lg px-6 py-3 shadow-md hover:scale-105 transition-transform">
     Schedule
   </button>
