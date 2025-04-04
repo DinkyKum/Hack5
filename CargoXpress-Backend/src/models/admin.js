@@ -58,7 +58,8 @@ const adminSchema = new Schema({
 });
 
 adminSchema.methods.getJWT= async function(){
-    const token= await jwt.sign({_id:this._id}, process.env.JWT_SECRET, {expiresIn:'7d'});
+    const role="admin";
+    const token= await jwt.sign({_id:this._id, role: role}, process.env.JWT_SECRET, {expiresIn:'7d'});
     return token;
 }
 

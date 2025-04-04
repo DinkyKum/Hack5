@@ -1,11 +1,11 @@
 const express= require('express');
 const profileRouter=express.Router();
 const {validateEditData}= require('../utils/validation')
-const {companyAuth} =  require('../middlewares/auth');
+const {companyAuth, traderAuth} =  require('../middlewares/auth');
 const TransportCompany = require('../models/transportCompany')
 
 
-profileRouter.get('/profile',companyAuth, async(req, res)=>{
+profileRouter.get('/companyProfile',companyAuth, async(req, res)=>{
     try{
         const company= await req.company;
         res.send(company);
@@ -14,8 +14,17 @@ profileRouter.get('/profile',companyAuth, async(req, res)=>{
         res.status(400).send("There is some error"+ err);
     }
 })
+profileRouter.get('/traderProfile',traderAuth, async(req, res)=>{
+    try{
+        const trader= await req.trader;
+        res.send(trader);
+    }
+    catch(err){
+        res.status(400).send("There is some error"+ err);
+    }
+})
 
-profileRouter.put('/profile/edit',companyAuth, async(req, res)=>{
+profileRouter.put('/profile/companyEdit',companyAuth, async(req, res)=>{
    try { 
     validateEditData(req);
     const loggedInCompany= req.company;
@@ -32,7 +41,25 @@ profileRouter.put('/profile/edit',companyAuth, async(req, res)=>{
         res.status(400).send("There is some error"+ err);
     }
 })
-
+profileRouter.put('/profile/traderEdit', traderAuth, async (req, res) => {
+    try {
+      validateEditData(req);
+  
+      const loggedInTrader = req.trader;
+  
+      // Update only the fields present in req.body
+      Object.keys(req.body).forEach((key) => {
+        loggedInTrader[key] = req.body[key];
+      });
+  
+      await loggedInTrader.save();
+  
+      res.send("Trader details updated successfully: " + JSON.stringify(loggedInTrader));
+    } catch (err) {
+      res.status(400).send("There is some error: " + err.message);
+    }
+  });
+  
 
 //While calling it in frontend make sure to call logout just after this!
 profileRouter.delete('/profile/delete', companyAuth, async(req, res)=>{

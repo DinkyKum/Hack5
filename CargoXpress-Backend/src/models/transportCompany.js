@@ -4,6 +4,7 @@ const validator= require('validator');
 const { Schema } = mongoose;
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { removeListener } = require('./admin');
 
 const transportCompanySchema = new Schema({
     name:{ 
@@ -56,7 +57,8 @@ const transportCompanySchema = new Schema({
 
 
 transportCompanySchema.methods.getJWT= async function(){
-    const token= await jwt.sign({_id:this._id}, process.env.JWT_SECRET, {expiresIn:'7d'});
+    const role="transportCompany"
+    const token= await jwt.sign({_id:this._id, role: role }, process.env.JWT_SECRET, {expiresIn:'7d'});
     return token;
 }
 

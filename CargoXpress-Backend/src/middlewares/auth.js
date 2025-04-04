@@ -10,7 +10,12 @@ const companyAuth= async (req, res, next)=>{
         return res.status(401).send("Kindly Login")
     }
     const decodedData=await jwt.verify(token, process.env.JWT_SECRET);
-    const {_id}=decodedData;
+    const {_id, role}=decodedData;
+
+    req.user = {
+        id: _id, 
+        role: role
+    };
 
     const company= await TransportCompany.findById(_id);
     if(!company){
@@ -31,7 +36,12 @@ const adminAuth= async (req, res, next)=>{
         return res.status(401).send("Kindly Login")
     }
     const decodedData=await jwt.verify(token, process.env.JWT_SECRET);
-    const {_id}=decodedData;
+    const {_id, role}=decodedData;
+
+    req.user = {
+        id: _id, 
+        role: role
+    };
 
     const admin= await Admin.findById(_id);
     if(!admin){
@@ -52,7 +62,12 @@ const traderAuth= async (req, res, next)=>{
         return res.status(401).send("Kindly Login")
     }
     const decodedData=await jwt.verify(token, process.env.JWT_SECRET);
-    const {_id}=decodedData;
+    const {_id, role}=decodedData;
+
+    req.user = {
+        id: _id, 
+        role: role
+    };
 
     const trader= await Trader.findById(_id);
     if(!trader){
