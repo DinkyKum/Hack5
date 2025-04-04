@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const traderMergedSchema = new Schema({
+const mergeableTraderSchema = new Schema({
     traderId: {
         type: mongoose.Schema.Types.ObjectId,
         // required: true,
@@ -31,10 +31,6 @@ const traderMergedSchema = new Schema({
         type: [String],
         // required: true
     },
-    // freeTruckUsed: {
-    //     type: Boolean,
-    //     default: false
-    // }
 });
 
-module.exports = mongoose.model("TraderMerged", traderMergedSchema);
+module.exports = mongoose.model("MergeableTrader", mergeableTraderSchema);

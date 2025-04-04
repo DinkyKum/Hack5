@@ -2,30 +2,39 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const unmergedTruckSchema = new Schema({
-    licensePlate:{ 
+    licensePlate: { 
         type: String,
         required: true,
-        unique:true,
+        unique: true,
     },
 
-    totalCapacity:{
+    totalCapacity: {
         type: Number,
     },
-    currentLoad:{
+    currentLoad: {
         type: [Number],
         default: [] 
     },
 
-    remainingLoad:{
-        type:[Number],
+    remainingLoad: {
+        type: [Number],
         default: [] 
     },
-    truckId:{
-        type:String,
-        required:true
-    },
     
-
+    truckId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Truck',  // Reference to the 'Truck' model
+        required: true
+    },
+    source:{
+        type: String, 
+    },
+    destination:{
+        type: String,
+    },
+    stops:{
+        type:[String],
+    }
 });
 
-module.exports= mongoose.model('UnmergedTruck', unmergedTruckSchema);
+module.exports = mongoose.model('UnmergedTruck', unmergedTruckSchema);

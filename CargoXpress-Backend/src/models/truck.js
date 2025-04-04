@@ -27,7 +27,6 @@ const truckSchema = new Schema({
         default: [] 
     }
 
-
 });
 
 module.exports= mongoose.model('Truck', truckSchema);

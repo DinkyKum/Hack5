@@ -7,15 +7,12 @@ const routeSchema = new Schema({
         required:true,
         ref:'Truck'
     },
-
     source:{
         type: String, 
     },
-
     destination:{
         type: String,
     },
-
     stops:{
         type:[String],
     },
