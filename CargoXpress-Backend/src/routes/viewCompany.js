@@ -16,7 +16,7 @@ viewCompanyRouter.get('/viewCompany', adminAuth, async (req,res)=>{
 
 })
 
-viewCompanyRouter.get('/viewTrader', adminAuth, async (req,res)=>{
+viewCompanyRouter.get('/viewTrader', async (req,res)=>{
 
    try { const traderList = await Trader.find({})
    res.send(traderList);
