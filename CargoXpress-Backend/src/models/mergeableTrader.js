@@ -7,7 +7,7 @@ const mergeableTraderSchema = new Schema({
         // required: true,
         ref: "Trader"
     },
-    truckId: {
+    truckId: { 
         type: String,
         // required: true
     },
