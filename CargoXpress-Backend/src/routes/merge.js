@@ -2,13 +2,13 @@ const express= require('express');
 const mergeRouter=express.Router();
 const Route = require('../models/route');
 const Truck=require('../models/truck')
-const {companyAuth} =  require('../middlewares/auth');
+const {companyAuth, adminAuth} =  require('../middlewares/auth');
 const MergeablePair =  require('../models/mergeablePair');
 const MergedSchedule= require('../models/mergedSchedule');
 const UnmergedTruck = require('../models/unmergedTruck');
 const FreeTruck = require('../models/freeTruck')
 
-mergeRouter.get('/mergeableSchedule', companyAuth, async (req, res) => {
+mergeRouter.get('/mergeableSchedule', adminAuth, async (req, res) => {
     try {
         const allRoutes = await Route.find();
         const allTrucks = await Truck.find();
@@ -147,7 +147,7 @@ mergeRouter.get('/mergeableSchedule', companyAuth, async (req, res) => {
 
 
 
-mergeRouter.get('/mergedSchedule', companyAuth, async (req, res) => {
+mergeRouter.get('/mergedSchedule', adminAuth, async (req, res) => {
     try {
         const mergeablePairs = await MergeablePair.find().populate('truckOneId').populate('truckTwoId');
 

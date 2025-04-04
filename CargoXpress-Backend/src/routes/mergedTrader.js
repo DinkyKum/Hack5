@@ -4,11 +4,11 @@ const UnmergedTruck = require("../models/unmergedTruck");
 const FreeTruck = require("../models/freeTruck");
 const TraderRequest = require("../models/traderRequest");
 const TraderMerged = require("../models/TraderMerged");
-const { companyAuth } = require("../middlewares/auth");
+const { companyAuth, adminAuth } = require("../middlewares/auth");
 const MergeableTrader = require("../models/mergeableTrader")
 
 // Route to handle trader truck merging
-traderRouter.get("/mergedTrader", companyAuth, async (req, res) => {
+traderRouter.get("/mergedTrader", adminAuth, async (req, res) => {
     try {
         const traderRequests = await TraderRequest.find();
         const unmergedTrucks = await UnmergedTruck.find();
@@ -25,12 +25,14 @@ traderRouter.get("/mergedTrader", companyAuth, async (req, res) => {
             }
 
             if (assignedTruck) {
+                console.log(assignedTruck)
                 const mergedEntry = {
                     truckId: assignedTruck.truckId,
                     load: request.load,
                     source: request.source,
                     destination: request.destination,
                     stops: request.stops,
+                    licensePlate: assignedTruck.licensePlate
                 };
                 traderMergedData.push(mergedEntry);
             }

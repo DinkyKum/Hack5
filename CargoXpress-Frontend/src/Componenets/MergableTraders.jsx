@@ -72,10 +72,10 @@ const MergeableTraders = () => {
                         </div>
                           <div>
                             <h4 className="text-2xl font-semibold text-white">
-                              Truck ID: {trader.truckId}
+                            License Number: {trader.licensePlate}
                             </h4>
                             <p className="text-xl text-gray-400">
-                              Load: {trader.load.join(", ")} KGs
+                              Load: {trader.load.join(", ")} Kg
                             </p>
                           </div>
                       </div>
