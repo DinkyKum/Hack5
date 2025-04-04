@@ -70,4 +70,28 @@ authRouter.post('/logout', async(req, res)=>{
 })
 
 
+authRouter.post('/trader/signup', async (req, res) => {
+    try {
+        const { name, email, password, aadharNumber } = req.body;
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create new Trader
+        const trader = new Trader({
+            name,
+            email,
+            password: hashedPassword,
+            aadharNumber
+        });
+
+        await trader.save();
+        res.status(201).json({ message: "Trader Registered Successfully", data: trader });
+    } catch (err) {
+        res.status(400).json({ error: "Error occurred: " + err.message });
+    }
+});
+
+
+
 module.exports= authRouter;
