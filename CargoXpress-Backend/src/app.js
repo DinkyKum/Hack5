@@ -16,11 +16,17 @@ const app = express();
 const port = process.env.PORT || 5000;
 const isVercel = !!process.env.VERCEL; // Detect if running on Vercel
 
-const allowedOrigins = ["http://localhost:5174","http://localhost:5173", "https://farmxpress.vercel.app"];
+const allowedOrigins = ["http://localhost:5174","http://localhost:5173", "https://cargoxpress.vercel.app/"];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: "GET,POST,PATCH,PUT,DELETE,OPTIONS",
     credentials: true,
   })

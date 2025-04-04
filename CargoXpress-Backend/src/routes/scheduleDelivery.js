@@ -1,6 +1,6 @@
 const express = require('express');
 const scheduleDeliveryRouter = express.Router();
-const { companyAuth } = require('../middlewares/auth');
+const { companyAuth, traderAuth } = require('../middlewares/auth');
 const Truck = require('../models/truck'); 
 const Route = require('../models/route'); 
 const TraderRequest = require('../models/traderRequest');
@@ -96,13 +96,16 @@ scheduleDeliveryRouter.delete('/scheduleDelivery/deletescheduleDelivery/:id', co
 });
 
 
-scheduleDeliveryRouter.post('/scheduleDelivery/traderRequest', companyAuth, async (req, res) => {
+scheduleDeliveryRouter.post('/scheduleDelivery/traderRequest', traderAuth, async (req, res) => {
     try {
-        const { traderId, load, source, destination, stops } = req.body;
+        const {  load, source, destination, stops } = req.body;
+
+        const traderId=req.trader._id;
 
         if (!traderId || !source || !destination) {
             return res.status(400).send("Trader ID, source, and destination are required.");
         }
+
 
         const newTraderRequest = new TraderRequest({
             traderId,
