@@ -1,11 +1,11 @@
 const express = require('express');
 const viewCompanyRouter = express.Router();
-const { companyAuth } = require('../middlewares/auth');
+const { adminAuth } = require('../middlewares/auth');
 const TransportCompany = require('../models/transportCompany');
 const Trader = require('../models/trader');
 
 
-viewCompanyRouter.get('/viewCompany', companyAuth, async (req,res)=>{
+viewCompanyRouter.get('/viewCompany', adminAuth, async (req,res)=>{
 
    try { const companyList=await TransportCompany.find({})
    res.send(companyList);
@@ -16,7 +16,7 @@ viewCompanyRouter.get('/viewCompany', companyAuth, async (req,res)=>{
 
 })
 
-viewCompanyRouter.get('/viewTrader',async (req,res)=>{
+viewCompanyRouter.get('/viewTrader', adminAuth, async (req,res)=>{
 
    try { const traderList = await Trader.find({})
    res.send(traderList);
@@ -27,7 +27,7 @@ viewCompanyRouter.get('/viewTrader',async (req,res)=>{
 
 })
 
-viewCompanyRouter.get('/viewCompany/:companyId', companyAuth, async (req,res)=>{
+viewCompanyRouter.get('/viewCompany/:companyId', adminAuth, async (req,res)=>{
     const {companyId} = req.params;
 
     try { const companyList=await TransportCompany.find({

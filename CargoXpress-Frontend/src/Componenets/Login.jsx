@@ -25,6 +25,35 @@ const Login = () => {
         { emailId, password }, 
         { withCredentials: true }
       );
+  
+      dispatch(addUser(res.data));
+  
+      // Check if emailId contains "@cargoxpress.com"
+      if (emailId.endsWith("@cargoxpress.com")) {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data || "Something went wrong");
+    }
+  };
+  
+
+  const HandleSignUp = async () => {
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/signup/${userRole}`,  // API now correctly includes userRole in params
+        {
+          name,
+          emailId,
+          password,
+          ...(userRole === "trader" ? { aadharNumber } : {}),
+          ...(userRole === "company" ? { registrationNumber } : {})
+        },
+        { withCredentials: true }
+      );
       dispatch(addUser(res.data));
       navigate('/');
     } catch (err) {
@@ -32,32 +61,6 @@ const Login = () => {
       setError(err.response?.data || "Something went wrong");
     }
   };
-
-  const HandleSignUp = async () => {
-    try {
-        console.log("Sending Signup Request with:", { name, emailId, password, registrationNumber, aadharNumber, userRole });
-
-        const res = await axios.post(
-            `${BASE_URL}/signup/${userRole}`,
-            { 
-                name, 
-                emailId, 
-                password, 
-                ...(userRole === "trader" ? { aadharNumber } : {}), 
-                ...(userRole === "company" ? { registrationNumber } : {}) 
-            },
-            { withCredentials: true }
-        );
-
-        console.log("Signup Response:", res.data);
-        dispatch(addUser(res.data.data));
-        navigate('/');
-    } catch (err) {
-        console.error("Signup API Error:", err);
-        setError(err.response?.data || "Something went wrong");
-    }
-};
-
 
   return (
     <div className="justify-center flex">

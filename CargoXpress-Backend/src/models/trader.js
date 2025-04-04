@@ -4,7 +4,6 @@ const validator = require("validator");
 const jwt=require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-
 const traderSchema = new Schema({
     name: {
         type: String,
