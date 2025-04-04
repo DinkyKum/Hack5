@@ -9,6 +9,7 @@ import MergedSchedule from "./Componenets/MergedSchedule";
 import MergeableSchedule from "./Componenets/MergeableSchedule";
 import Truck from "./Componenets/Truck";
 import AddRoute from "./Componenets/AddRoute";
+import Profile from "./Componenets/Profile";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
       <Route path="/admin" element={<AdminDashboard/>}/>
       <Route path="/mergedSchedule" element={<MergedSchedule/>}/>
       <Route path="/mergeable" element={<MergeableSchedule/>}/>
+      <Route path="/profile" element={<Profile/>}/>
 
       
       </Route>
