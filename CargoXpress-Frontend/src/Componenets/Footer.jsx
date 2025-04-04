@@ -22,7 +22,7 @@ const FooterSec = () => {
               className="text-4xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent hover:from-green-500 hover:to-blue-600 transition-all cursor-pointer"
               href="/"
             >
-              FarmXpress
+              CargoXpress
             </a>
             <p className="text-gray-400 leading-relaxed">A RunTime Terror Project.</p>
           </div>
@@ -103,7 +103,7 @@ const FooterSec = () => {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} FarmXpress Industries Ltd. All rights reserved.
+              © {new Date().getFullYear()} CargoXpress Industries Ltd. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="/privacy" className="text-sm text-gray-500 hover:text-blue-400 transition-colors duration-200">

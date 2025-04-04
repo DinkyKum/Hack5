@@ -72,15 +72,7 @@ const HeroSection = () => {
                 <Truck className="mb-6 h-16 w-16 text-white" />
                 <h1 className="mb-4 text-5xl font-bold text-white">{slide.title}</h1>
                 <p className="mb-8 text-xl text-gray-200">{slide.subtitle}</p>
-                <button
-                  className={`rounded-full px-8 py-3 font-semibold transition-colors ${
-                    isDark 
-                      ? 'bg-gray-800 text-white hover:bg-gray-700' 
-                      : 'bg-white text-gray-900 hover:bg-gray-100'
-                  }`}
-                >
-                  Learn More
-                </button>
+                
               </div>
             </div>
           </div>

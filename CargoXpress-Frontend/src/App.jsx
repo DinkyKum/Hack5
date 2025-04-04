@@ -10,6 +10,7 @@ import MergeableSchedule from "./Componenets/MergeableSchedule";
 import Truck from "./Componenets/Truck";
 import AddRoute from "./Componenets/AddRoute";
 import Profile from "./Componenets/Profile";
+import MergeableTraders from "./Componenets/MergableTraders";
 
 
 function App() {
@@ -26,7 +27,8 @@ function App() {
       <Route path="/mergedSchedule" element={<MergedSchedule/>}/>
       <Route path="/mergeable" element={<MergeableSchedule/>}/>
       <Route path="/profile" element={<Profile/>}/>
-
+      <Route path="/mergeableTraders" element={<MergeableTraders/>}/>
+    
       
       </Route>
     </Routes>
