@@ -13,7 +13,7 @@ const AdminDashboard = () => {
       const res = await axios.get( BASE_URL + "/viewCompany", {
         withCredentials: true,
       });
-      console.log("API Response:", res.data);
+      // console.log("API Response:", res.data);
       setCompanies(res.data);
     } catch (error) {
       console.error("Error fetching companies:", error.response?.data || error.message);

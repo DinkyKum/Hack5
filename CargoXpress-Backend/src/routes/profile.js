@@ -20,7 +20,7 @@ profileRouter.get('/profile', async (req, res) => {
   
       let user;
   
-      if (role === 'transportCompany') {
+      if (role === 'company') {
         user = await TransportCompany.findById(_id).select('-password');
       } else if (role === 'admin') {
         user = await Admin.findById(_id).select('-password');
@@ -34,7 +34,8 @@ profileRouter.get('/profile', async (req, res) => {
         return res.status(404).json({ message: "User not found" });
       }
   
-      res.status(200).json(user);
+      res.status(200).json({ ...user.toObject(), role });
+
     } catch (err) {
       console.error("Error in /me route:", err);
       res.status(500).json({ message: "Something went wrong", error: err.message });

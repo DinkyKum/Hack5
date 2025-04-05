@@ -64,14 +64,18 @@ authRouter.post('/signup/:userType', async (req, res)=>{
     try {
         const { emailId, password } = req.body;
 
+        let role="company"
+
         let user = await TransportCompany.findOne({ emailId });
 
         if (!user) {
             user = await Trader.findOne({ emailId });
+            role="trader"
         }
 
         if (!user) {
             user = await Admin.findOne({ emailId });
+            role="admin"
         }
 
         if (!user) {
@@ -89,7 +93,7 @@ authRouter.post('/signup/:userType', async (req, res)=>{
                 sameSite: "none",  
             });
 
-            return res.json(user);
+            return res.json({ ...user.toObject(), role });
         } else {
             return res.status(400).json({ message: "Invalid Credentials" });
         }

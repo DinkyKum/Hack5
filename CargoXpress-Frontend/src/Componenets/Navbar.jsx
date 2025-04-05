@@ -7,6 +7,7 @@ import { removeUser } from '../utils/userSlice';
 import axios from 'axios';
 const Navbar = () => {
   const user = useSelector((store) => store.user);
+  const role = user?.role; 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,6 +20,23 @@ const Navbar = () => {
       console.error("Logout failed", err);
     }
   };
+
+
+// Assuming user object has a role property
+
+
+    const getScheduleRoute = () => {
+        switch (role) {
+            case 'trader':
+                return '/traderRequest';
+            case 'admin':
+                return '/admin';
+            case 'company':
+                return '/truck';
+            default:
+                return '/schedule'; // fallback
+        }
+    };
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -64,7 +82,8 @@ const Navbar = () => {
                 <li>
                   <Link to="/profile" className="justify-between">Profile</Link>
                 </li>
-                <li><Link to='/truck'>Schedule</Link></li>
+                {/* <li><Link to='/truck'>Schedule</Link></li> */}
+                <li><Link to={getScheduleRoute()}>Schedule</Link></li>
                 <li><button onClick={HandleLogout}>Logout</button></li>
               </ul>
             </div>
