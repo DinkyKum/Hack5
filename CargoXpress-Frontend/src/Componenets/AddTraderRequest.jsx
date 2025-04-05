@@ -4,10 +4,10 @@ import { BASE_URL } from "../utils/constants";
 
 const AddTraderRequest = () => {
   const [traderId, setTraderId] = useState("");
-  const [load, setLoad] = useState([""]); // Array for numeric inputs
+  const [load, setLoad] = useState([""]); 
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
-  const [stops, setStops] = useState([""]); // Array for stop names
+  const [stops, setStops] = useState([""]); 
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 

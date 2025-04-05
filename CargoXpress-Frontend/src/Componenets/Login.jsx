@@ -27,7 +27,7 @@ const Login = () => {
       );
   
       dispatch(addUser(res.data));
-  
+
       // Check if emailId contains "@cargoxpress.com"
       if (emailId.endsWith("@cargoxpress.com")) {
         navigate('/admin');
@@ -39,7 +39,7 @@ const Login = () => {
       setError(err.response?.data || "Something went wrong");
     }
   };
-  
+
 
   const HandleSignUp = async () => {
     try {
