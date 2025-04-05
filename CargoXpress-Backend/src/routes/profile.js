@@ -2,8 +2,44 @@ const express= require('express');
 const profileRouter=express.Router();
 const {validateEditData}= require('../utils/validation')
 const {companyAuth, traderAuth} =  require('../middlewares/auth');
-const TransportCompany = require('../models/transportCompany')
+const TransportCompany = require('../models/transportCompany');
+const jwt=require('jsonwebtoken');
+const Trader= require('../models/trader');
+const Admin = require('../models/admin');
 
+
+profileRouter.get('/profile', async (req, res) => {
+    try {
+      const { token } = req.cookies;
+      if (!token) {
+        return res.status(401).json({ message: "User not logged in" });
+      }
+  
+      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+      const { _id, role } = decodedData;
+  
+      let user;
+  
+      if (role === 'transportCompany') {
+        user = await TransportCompany.findById(_id).select('-password');
+      } else if (role === 'admin') {
+        user = await Admin.findById(_id).select('-password');
+      } else if (role === 'trader') {
+        user = await Trader.findById(_id).select('-password');
+      } else {
+        return res.status(400).json({ message: "Invalid role in token" });
+      }
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      res.status(200).json(user);
+    } catch (err) {
+      console.error("Error in /me route:", err);
+      res.status(500).json({ message: "Something went wrong", error: err.message });
+    }
+  });
 
 profileRouter.get('/companyProfile',companyAuth, async(req, res)=>{
     try{
