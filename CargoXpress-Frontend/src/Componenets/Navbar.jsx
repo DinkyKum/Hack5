@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL } from '../utils/constants';
 import { removeUser } from '../utils/userSlice';
 import axios from 'axios';
-
 const Navbar = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
@@ -32,6 +31,14 @@ const Navbar = () => {
     <div className="navbar h-[88px] bg-base-100">
       <div className="flex-1">
         <a className="btn btn-ghost text-2xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent hover:from-green-500 hover:to-blue-600 transition-all" href="/">CargoXpress</a>
+        {/* <a href="/">
+          <img
+            src={cargoTruck} // 🔁 Replace with actual image file name
+            alt="CargoXpress Logo"
+            className="h-88px w-auto object-contain"
+  />
+</a> */}
+
       </div>
       <div className="flex-none gap-2">
         <div className='flex gap-10 text-lg mr-5 font-bold'>
