@@ -16,7 +16,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 const isVercel = !!process.env.VERCEL; // Detect if running on Vercel
 
-const allowedOrigins = ["http://localhost:5174","http://localhost:5173", "http://hack5-five.vercel.app"];
+const allowedOrigins = ["http://localhost:5174","http://localhost:5173", "https://hack5-five.vercel.app"];
 
 app.use(
   cors({
